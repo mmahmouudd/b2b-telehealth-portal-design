@@ -1,0 +1,189 @@
+@import "tailwindcss";
+
+@theme {
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Neutrals */
+  --color-mist: #f3f7f5;
+  --color-paper: #fbfdfc;
+  --color-ink: #0d1f1a;
+  --color-ink-soft: #43574f;
+  --color-line: #dbe6e0;
+  --color-line-dark: #1d4037;
+
+  /* Deep pine (dark sections) */
+  --color-pine-950: #06201b;
+  --color-pine-900: #0a2c25;
+  --color-pine-800: #0f3a31;
+  --color-pine-700: #14493d;
+  --color-pine-600: #1a5c4c;
+  --color-pine-500: #23735f;
+
+  /* Jade (primary green) */
+  --color-jade-50: #ecf6f1;
+  --color-jade-100: #d8eee3;
+  --color-jade-200: #b4ddc9;
+  --color-jade-300: #86c6ab;
+  --color-jade-400: #4aa987;
+  --color-jade-500: #178c6c;
+  --color-jade-600: #0f745a;
+  --color-jade-700: #0d5d49;
+
+  /* Azure (calm blue) */
+  --color-azure-50: #eaf2f8;
+  --color-azure-100: #d7e7f2;
+  --color-azure-200: #aecde4;
+  --color-azure-300: #7fabce;
+  --color-azure-400: #4d87b4;
+  --color-azure-500: #2f6d9e;
+  --color-azure-600: #235881;
+  --color-azure-700: #1b4666;
+
+  /* Motion */
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-float: float 8s ease-in-out infinite;
+  --animate-float-slow: float 11.5s ease-in-out infinite;
+  --animate-pulse-soft: pulseSoft 2.4s ease-in-out infinite;
+  --animate-draw-line: drawLine 2.4s ease-out forwards;
+  --animate-rise: rise 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  @keyframes drawLine {
+    from { stroke-dashoffset: var(--dash, 320); }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+}
+
+/* ---------- Base ---------- */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-mist text-ink font-sans antialiased;
+  font-feature-settings: "cv11", "ss01";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-jade-200);
+  color: var(--color-pine-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-jade-600);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.font-display {
+  font-optical-sizing: auto;
+}
+
+/* ---------- Reveal on scroll ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.9s cubic-bezier(0.22, 0.61, 0.36, 1),
+    transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Decorative helpers ---------- */
+
+.grid-bg {
+  background-image:
+    linear-gradient(to right, rgb(13 31 26 / 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(13 31 26 / 0.055) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+.grid-bg-dark {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.045) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+.fade-edges {
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
+.link-underline {
+  position: relative;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.ring-conic {
+  background: conic-gradient(from 140deg, var(--color-jade-400), var(--color-azure-400), var(--color-jade-300), var(--color-jade-400));
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .animate-marquee,
+  .animate-float,
+  .animate-float-slow,
+  .animate-pulse-soft,
+  .animate-draw-line,
+  .animate-rise {
+    animation: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
